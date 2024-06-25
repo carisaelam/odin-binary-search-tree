@@ -1,2 +1,3 @@
-# odin-binary-search-tree
-Binary Search Tree Creation project for TOP 
+# Binary Search Trees in Ruby
+
+In this project, I implemented a Binary Search Tree (BST) in Ruby as part of The Odin Project's curriculum. This involved creating methods to build the tree from an array of data, insert and delete nodes, find a node, and traverse the tree in various orders (in-order, pre-order, and post-order). Additionally, I included functionality to balance the tree and ensure its efficiency for search operations. The project helped solidify my understanding of BSTs and their practical applications, particularly in efficiently managing and searching through data. By completing this project, I deepened my grasp of important computer science concepts and Ruby programming techniques.
