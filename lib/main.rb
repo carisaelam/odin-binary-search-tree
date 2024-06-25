@@ -15,14 +15,13 @@ class Tree
 
   def initialize(array)
     @array = array.sort.uniq
-    @start = 0
-    @ending = @array.length - 1
-    @root = build_tree(@array, @start, @ending)
+    @root = build_tree(@array)
   end
 
-  def build_tree(array, start, ending)
+  def build_tree(array, start = 0, ending = nil)
     arr = array.sort.uniq
     length = arr.length
+    ending = ending.nil? ? (length - 1) : ending
 
     p "sorted arr: #{arr}"
     p "start: #{start}"
@@ -43,6 +42,24 @@ class Tree
     end
   end
 
+  # recursive method for navigating through tree and inserting new node
+  def insert_recurse(node, value)
+    return Node.new(value) if node.nil?
+
+    if value < node.data
+      node.left = insert_recurse(node.left, value)
+    elsif value > node.data
+      node.right = insert_recurse(node.right, value)
+    end
+
+    node
+  end
+
+  # insert a node at the correct spot in the tree
+  def insert(value)
+    @root = insert_recurse(@root, value)
+  end
+
   # pretty print method from discord
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -51,23 +68,8 @@ class Tree
   end
 end
 
-# array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-array = [1, 2, 3, 4, 5, 6, 7].sort.uniq
+array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
-new_tree = Tree.new(array).pretty_print
-# [ ] Write a #build_tree method which takes an array of data (e.g., [1, 7, 4, 23, 8,
-#     9, 4, 3, 5, 7, 9, 67, 6345, 324]) and turns it into a balanced binary tree full of Node objects appropriately placed (don’t forget to sort and remove duplicates!). The #build_tree method should return the level 0 root node.
-
-#     def build_tree(arr, start, end)
-#       arr = arr.sort.uniq
-#       if start > end return null
-#       else
-#         mid = (start + end) / 2
-#         node = Node.new(arr[mid])
-#         node.left = build_tree(arr, start, mid-1)
-#         node.right = build_tree(arr, mid+1, end)
-#       return node
-#     end
-
-#       Pretty Print method
-#
+tree = Tree.new(array)
+tree.insert(40_404)
+tree.pretty_print
