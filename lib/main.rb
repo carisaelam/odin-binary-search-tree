@@ -199,6 +199,20 @@ class Tree
     p "POST_ORDER TRAVERSAL = #{post_order_traversal}" if node == @root
   end
 
+  def height(node = @root)
+    return 0 if node.nil?
+
+    p "node is #{node}: #{node.data}"
+
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    current_height = 1 + [left_height, right_height].max
+
+    p current_height - 1 if node == @root
+    current_height
+  end
+
   # pretty print method from discord
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -210,7 +224,4 @@ end
 array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 tree = Tree.new(array)
 tree.pretty_print
-tree.level_order
-tree.pre_order
-tree.in_order
-tree.post_order
+tree.height
