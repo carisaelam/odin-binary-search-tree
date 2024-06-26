@@ -45,17 +45,17 @@ class Tree
   end
 
   def delete_node(node, value)
-    p "i am the delete node function, and i am trying to delete #{value}"
-    p "current node = #{node.data}"
+    # p "i am the delete node function, and i am trying to delete #{value}"
+    # p "current node = #{node.data}"
 
     return nil if node.nil?
 
-    p "current before recursion: #{node.data}"
+    # p "current before recursion: #{node.data}"
 
     # finding the node to delete
     if node.data == value
 
-      p "i have found the data to be deleted: #{node.data}"
+      # p "i have found the data to be deleted: #{node.data}"
       # leaf node = return nil
       if !node.left && !node.right
         p '🍀 leaf node'
@@ -71,19 +71,19 @@ class Tree
 
       # two children ==>
 
-      p "we've got two children"
-      p "node right now is: #{node.data}"
+      # p "we've got two children"
+      # p "node right now is: #{node.data}"
 
       ## find smallest value on right tree or largest on left
       successor = find_successor(node)
 
-      p "successor: #{successor.data}"
-      p "nodetobedeleted: #{node.data}"
+      # p "successor: #{successor.data}"
+      # p "nodetobedeleted: #{node.data}"
 
       # copies successor value to node to be deleted
       node.data = successor.data
 
-      p "new node after successor = #{node.data}"
+      # p "new node after successor = #{node.data}"
 
       ## recursively call delete_node to delete the successor or predecessor, which is now a duplicate
       node.right = delete_node(node.right, successor.data)
@@ -146,6 +146,28 @@ class Tree
     @root = insert_recurse(@root, value)
   end
 
+  def level_order
+    p 'level_order running'
+    return if @root.nil?
+
+    queue = []
+    level_order_traversal = []
+    queue.push(@root)
+
+    p 'starting until loop'
+    p "queue: #{queue}"
+
+    until queue.empty?
+      current = queue.shift
+      level_order_traversal.push(current.data)
+
+      queue.push(current.left) if current.left
+      queue.push(current.right) if current.right
+    end
+
+    p "TRAVERSAL = #{level_order_traversal}"
+  end
+
   # pretty print method from discord
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -154,10 +176,7 @@ class Tree
   end
 end
 
-# array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-array = [1, 4, 5, 9, 11, 40, 101, 59_949, 900_000]
-
+array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 tree = Tree.new(array)
 tree.pretty_print
-tree.delete(101)
-tree.pretty_print
+tree.level_order
