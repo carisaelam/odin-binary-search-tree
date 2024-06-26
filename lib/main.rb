@@ -23,10 +23,8 @@ class Tree
     p 'find method begins...'
     # p "current: #{current.data}"
     # p "value: #{value}"
-    if !@array.include?(value)
-      p 'value not in array'
-      nil
-    elsif current.data == value
+
+    if current.data == value
       p "we found it: #{current}"
       current
     elsif value < current.data
@@ -233,6 +231,40 @@ class Tree
     end
   end
 
+  def find_leaf(current = @root)
+    p 'find leaf running'
+    leaves = []
+    p "current = #{current} leaves = #{leaves}"
+
+    if current.left.nil? && current.right.nil?
+      p "🍀 leaf found: #{current.data}"
+      leaves.push(current)
+      return leaves
+    end
+
+    leaves.concat(find_leaf(current.left)) if current.left
+
+    leaves.concat(find_leaf(current.right)) if current.right
+
+    pp "end of find_leaf method. leaves: #{leaves}"
+    leaves
+  end
+
+  def calculate_difference(depths)
+    depths.combination(2).all? { |a, b| (a - b).abs < 1 }
+  end
+
+  def balanced?
+    p 'balanced method called'
+    depths = []
+    leaves = find_leaf
+    pp "leaves: #{leaves}"
+    leaves.each do |leaf|
+      depths.push(depth(leaf))
+    end
+    calculate_difference(depths)
+  end
+
   # pretty print method from discord
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -242,7 +274,7 @@ class Tree
 end
 
 array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+# array = [1, 2, 3]
 tree = Tree.new(array)
 node_ex = tree.find(1)
 tree.pretty_print
-p tree.depth(node_ex)
