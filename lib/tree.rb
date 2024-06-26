@@ -1,4 +1,4 @@
-require_relative 'linked_list'
+# frozen_string_literal: true
 
 class Node
   attr_accessor :data, :left, :right
@@ -33,7 +33,7 @@ class Tree
   def find_successor(current)
     return current if current.left.nil?
 
-    current = find_successor(current.right)
+    find_successor(current.right)
   end
 
   def delete_node(node, value)
@@ -144,7 +144,7 @@ class Tree
     pre_order(node.left, pre_order_traversal)
     pre_order(node.right, pre_order_traversal)
 
-    p "PRE_ORDER TRAVERSAL = #{pre_order_traversal}" if node == @root
+    pre_order_traversal if node == @root
   end
 
   def in_order(node = @root, in_order_traversal = [])
@@ -155,7 +155,7 @@ class Tree
     in_order_traversal.push(node.data)
     in_order(node.right, in_order_traversal)
 
-    p "IN_ORDER TRAVERSAL = #{in_order_traversal}" if node == @root
+    in_order_traversal if node == @root
   end
 
   def post_order(node = @root, post_order_traversal = [])
@@ -166,7 +166,7 @@ class Tree
     post_order(node.right, post_order_traversal)
     post_order_traversal.push(node.data)
 
-    p "POST_ORDER TRAVERSAL = #{post_order_traversal}" if node == @root
+    post_order_traversal if node == @root
   end
 
   def height(node = @root)

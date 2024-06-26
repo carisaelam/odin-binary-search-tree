@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'tree'
 
 # [x] Create a binary search tree from an array of random numbers (Array.new(15) { rand(1..100) })
