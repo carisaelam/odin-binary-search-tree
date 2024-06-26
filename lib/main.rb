@@ -162,7 +162,7 @@ class Tree
       queue.push(current.right) if current.right
     end
 
-    p "LEVEL_ORDER TRAVERSAL = #{level_order_traversal}"
+    level_order_traversal
   end
 
   def pre_order(node = @root, pre_order_traversal = [])
@@ -265,6 +265,13 @@ class Tree
     calculate_difference(depths)
   end
 
+  def rebalance
+    # traverse tree to get array
+    traversal = level_order
+    p "traversal= #{traversal}"
+    @root = build_tree(traversal)
+  end
+
   # pretty print method from discord
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -273,8 +280,15 @@ class Tree
   end
 end
 
+# array = [1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345, 6400, 6401, 6402]
+
 array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 # array = [1, 2, 3]
 tree = Tree.new(array)
 node_ex = tree.find(1)
+tree.insert(6400)
+tree.insert(6401)
+tree.insert(6402)
+tree.pretty_print
+tree.rebalance
 tree.pretty_print
