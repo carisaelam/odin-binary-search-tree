@@ -36,74 +36,52 @@ class Tree
     end
   end
 
-  def delete(value)
-    node_to_delete = find(value)
-    p "node_to_delete: #{node_to_delete.data}"
-    # start at root, iterate through tree until current.left/right == node_to_delete
-    current = @root
+  # traverse tree and performe delete
+  def delete_node(node, value)
+    p "i am the delete node function, and i am trying to delete #{value}"
+    p "current node = #{node.data}"
 
-    p "we start at the root: #{current.data}"
+    return nil if node.nil?
 
-    # if current is the root
-    if current == node_to_delete
-      p 'we need to delete the root'
+    p "current before recursion: #{node.data}"
 
-    # if current left is node to delete
-    elsif current.left == node_to_delete
-      p "you are at the parent node (#{current.data}). node to delete is left child"
+    if node.data == value
+      p "i have found the data to be deleted: #{node.data}"
 
-      # we need to check for how many children
-      p 'checking for children'
+      # leaf node = return nil
+      if !node.left && !node.right
+        p '🍀 leaf node'
+        return nil
 
-      # temp make current.left the main node
-      node_to_delete_temp = current.left
-
-      # if there are two children
-      if node_to_delete_temp.left && node_to_delete_temp.right
-        p "two children: #{node_to_delete_temp.left.data} & #{node_to_delete_temp.right.data}"
-
-      # if only a left child
-      elsif node_to_delete_temp.left && !node_to_delete_temp.right
-        p "only the left child: #{node_to_delete_temp.right.data}"
-
-      # if that child
-
-      # if only a right child
-      elsif !node_to_delete_temp.left && node_to_delete_temp.right
-        p "only the right child: #{node_to_delete_temp.right.data}"
-
+      # single child = return child
+      elsif node.left && !node.right
+        return node.left
+      elsif !node.left && node.right
+        return node.right
       end
 
-      # if current right is node to delete
-    elsif current.right == node_to_delete
-      p "you are at the parent node (#{current.data}). node to delete is right child"
+    # two children
+    ## find smallest value on right tree or largest on left
 
-      # we need to check for how many children
-      p 'checking for children'
+    ## replace value of node to be deleted with value of successor or predecessor
 
-      # temp make current.right the main node
-      node_to_delete_temp = current.right
+    ## recursively call delete_node to delete the successor or predecessor, which is now a duplicate
 
-      # if there are two children
-      if node_to_delete_temp.left && node_to_delete_temp.right
-        p "two children: #{node_to_delete_temp.left.data} & #{node_to_delete_temp.right.data}"
-
-      # if only a left child
-      elsif node_to_delete_temp.left && !node_to_delete_temp.right
-        p "only the right child: #{node_to_delete_temp.left.data}"
-
-      # if only a right child
-      elsif !node_to_delete_temp.left && node_to_delete_temp.right
-        p "only the right child: #{node_to_delete_temp.right.data}"
-
-      end
+    elsif node.data < value
+      node.right = delete_node(node.right, value)
+    else
+      node.data > value
+      node.left = delete_node(node.left, value)
     end
+
+    p "current after recursion: #{node.data}"
+    node
   end
 
   # delete main function
-  # def delete(value)
-  #   @root = delete_node(@root, value)
-  # end
+  def delete(value)
+    delete_node(@root, value)
+  end
 
   def build_tree(array, start = 0, ending = nil)
     arr = array.sort.uniq
@@ -156,9 +134,9 @@ class Tree
 end
 
 # array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+array = [1, 2, 3, 4]
 
 tree = Tree.new(array)
 tree.pretty_print
-tree.delete(7)
+tree.delete(4)
 tree.pretty_print
