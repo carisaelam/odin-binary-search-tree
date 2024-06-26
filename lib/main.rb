@@ -126,6 +126,7 @@ class Tree
       # p "node right #{node.right}"
       node
     end
+    node
   end
 
   # recursive method for navigating through tree and inserting new node
@@ -213,6 +214,25 @@ class Tree
     current_height
   end
 
+  def depth(node = @root, current = @root, current_depth = 0)
+    # if node is root, depth is 0
+    return -1 if current.nil?
+
+    return current_depth if current == node
+
+    # otherwise, calculate depth
+    left_depth = depth(node, current.left, current_depth + 1)
+    right_depth = depth(node, current.right, current_depth + 1)
+
+    if left_depth != -1
+      left_depth
+    elsif right_depth != -1
+      right_depth
+    else
+      -1
+    end
+  end
+
   # pretty print method from discord
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -223,5 +243,6 @@ end
 
 array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 tree = Tree.new(array)
+node_ex = tree.find(1)
 tree.pretty_print
-tree.height
+p tree.depth(node_ex)
