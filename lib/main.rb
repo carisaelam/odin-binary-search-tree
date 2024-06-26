@@ -23,7 +23,10 @@ class Tree
     p 'find method begins...'
     p "current: #{current.data}"
     p "value: #{value}"
-    if current.data == value
+    if !@array.include?(value)
+      p 'value not in array'
+      nil
+    elsif current.data == value
       p "we found it: #{current.data}"
       current.data
     elsif value < current.data
@@ -95,4 +98,4 @@ array = [1, 2, 3]
 
 tree = Tree.new(array)
 tree.pretty_print
-tree.find(1)
+tree.find(4)
