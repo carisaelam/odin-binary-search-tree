@@ -36,7 +36,14 @@ class Tree
     end
   end
 
-  # traverse tree and performe delete
+  # helper function for delete method
+  def find_successor(current)
+    p "find successor function calling. current is #{current.data}"
+    return current if current.left.nil?
+
+    current = find_successor(current.right)
+  end
+
   def delete_node(node, value)
     p "i am the delete node function, and i am trying to delete #{value}"
     p "current node = #{node.data}"
@@ -45,36 +52,50 @@ class Tree
 
     p "current before recursion: #{node.data}"
 
+    # finding the node to delete
     if node.data == value
-      p "i have found the data to be deleted: #{node.data}"
 
+      p "i have found the data to be deleted: #{node.data}"
       # leaf node = return nil
       if !node.left && !node.right
         p '🍀 leaf node'
         return nil
+      end
 
       # single child = return child
-      elsif node.left && !node.right
+      if node.left && !node.right
         return node.left
       elsif !node.left && node.right
         return node.right
       end
 
-    # two children
-    ## find smallest value on right tree or largest on left
+      # two children ==>
 
-    ## replace value of node to be deleted with value of successor or predecessor
+      p "we've got two children"
+      p "node right now is: #{node.data}"
 
-    ## recursively call delete_node to delete the successor or predecessor, which is now a duplicate
+      ## find smallest value on right tree or largest on left
+      successor = find_successor(node)
+
+      p "successor: #{successor.data}"
+      p "nodetobedeleted: #{node.data}"
+
+      # copies successor value to node to be deleted
+      node.data = successor.data
+
+      p "new node after successor = #{node.data}"
+
+      ## recursively call delete_node to delete the successor or predecessor, which is now a duplicate
+      node.right = delete_node(node.right, successor.data)
 
     elsif node.data < value
       node.right = delete_node(node.right, value)
-    else
-      node.data > value
-      node.left = delete_node(node.left, value)
-    end
 
-    p "current after recursion: #{node.data}"
+    else
+
+      node.left = delete_node(node.left, value)
+
+    end
     node
   end
 
@@ -134,9 +155,9 @@ class Tree
 end
 
 # array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-array = [1, 2, 3, 4]
+array = [1, 4, 5, 9, 11, 40, 101, 59_949, 900_000]
 
 tree = Tree.new(array)
 tree.pretty_print
-tree.delete(4)
+tree.delete(101)
 tree.pretty_print
