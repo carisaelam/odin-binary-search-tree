@@ -147,25 +147,56 @@ class Tree
   end
 
   def level_order
-    p 'level_order running'
     return if @root.nil?
 
     queue = []
     level_order_traversal = []
     queue.push(@root)
 
-    p 'starting until loop'
-    p "queue: #{queue}"
-
     until queue.empty?
       current = queue.shift
       level_order_traversal.push(current.data)
+
+      yield(current) if block_given?
 
       queue.push(current.left) if current.left
       queue.push(current.right) if current.right
     end
 
-    p "TRAVERSAL = #{level_order_traversal}"
+    p "LEVEL_ORDER TRAVERSAL = #{level_order_traversal}"
+  end
+
+  def pre_order(node = @root, pre_order_traversal = [])
+    return if node.nil?
+
+    yield(node) if block_given?
+    pre_order_traversal.push(node.data)
+    pre_order(node.left, pre_order_traversal)
+    pre_order(node.right, pre_order_traversal)
+
+    p "PRE_ORDER TRAVERSAL = #{pre_order_traversal}" if node == @root
+  end
+
+  def in_order(node = @root, in_order_traversal = [])
+    return if node.nil?
+
+    yield(node) if block_given?
+    in_order(node.left, in_order_traversal)
+    in_order_traversal.push(node.data)
+    in_order(node.right, in_order_traversal)
+
+    p "IN_ORDER TRAVERSAL = #{in_order_traversal}" if node == @root
+  end
+
+  def post_order(node = @root, post_order_traversal = [])
+    return if node.nil?
+
+    yield(node) if block_given?
+    post_order(node.left, post_order_traversal)
+    post_order(node.right, post_order_traversal)
+    post_order_traversal.push(node.data)
+
+    p "POST_ORDER TRAVERSAL = #{post_order_traversal}" if node == @root
   end
 
   # pretty print method from discord
@@ -180,3 +211,6 @@ array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 tree = Tree.new(array)
 tree.pretty_print
 tree.level_order
+tree.pre_order
+tree.in_order
+tree.post_order
